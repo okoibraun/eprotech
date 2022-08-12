@@ -63,10 +63,20 @@
                         <div class="card-header">
                             <div class="d-flex align-items-center flex-wrap gap-2">
                                 <div class="flex-grow-1">
-                                    
+                                    <!-- <button class="btn btn-info add-btn" data-bs-toggle="modal" data-bs-target="#addCompanyModal"><i class="ri-add-fill me-1 align-bottom"></i> Add Company</button> -->
                                 </div>
                                 <div class="flex-shrink-0">
                                     <div class="hstack text-nowrap gap-2">
+                                        <!-- <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addmembers"><i class="ri-filter-2-line me-1 align-bottom"></i> Filters</button>
+                                        <button class="btn btn-soft-success">Import</button>
+                                        <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-soft-info"><i class="ri-more-2-fill"></i></button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                            <li><a class="dropdown-item" href="#">All</a></li>
+                                            <li><a class="dropdown-item" href="#">Last Week</a></li>
+                                            <li><a class="dropdown-item" href="#">Last Month</a></li>
+                                            <li><a class="dropdown-item" href="#">Last Year</a></li>
+                                        </ul> -->
                                         <button class="btn btn-info add-btn" data-bs-toggle="modal" data-bs-target="#addCompanyModal"><i class="ri-add-fill me-1 align-bottom"></i> Add Company</button>
                                     </div>
                                 </div>
@@ -83,6 +93,15 @@
                                     <div class="search-box">
                                         <input type="text" class="form-control search" placeholder="Search for company...">
                                         <i class="ri-search-line search-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 ms-auto">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-muted">Sort by: </span>
+                                        <select class="form-control mb-0" data-choices data-choices-search-false id="choices-single-default">
+                                            <option value="Company">Company</option>
+                                            <option value="location">Location</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 <?php
 
-class User extends CRUD
+class User
 {
     // /**
     //  * Propertiees
