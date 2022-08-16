@@ -16,10 +16,30 @@ $conn = $crud->connect();
 
 //Add Company
 if(isset($_POST['addCompBtn'])) {
-    $add_comp = $crud->add($conn, "tbl_suppliers", $_POST, [], ['cat_id'=>'i'], true);
+    $add_comp = $crud->add($conn, "tbl_suppliers", $_POST, [], [], true);
 
     if($add_comp) {
         $crud->redirect("suppliers.php?stat=1");
+    }
+}
+
+/**
+ * Add User 
+ */
+if(isset($_POST['addUserBtn'])) {
+    $add_user = $crud->add($conn, "tbl_users", $_POST, [], [], true );
+    if($add_user) {
+        $crud->redirect("users.php?stat=1");
+    }
+}
+
+/*
+Add User Group
+*/
+if(isset($_POST['addGroupBtn'])) {
+    $add_user_group = $crud->add($conn, "tbl_user_groups", $_POST, [], ['active'=>'i'], true);
+    if($add_user_group) {
+        $crud->redirect("user-groups.php?stat=1");
     }
 }
 
@@ -34,7 +54,7 @@ if(isset($_POST['loginBtn'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $login = $crud->login("SELECT * FROM tbl_staffs WHERE email='{$username}' AND `password`='{$password}'");
+    $login = $crud->login($conn, "SELECT * FROM tbl_users WHERE email='{$username}' AND `password`='{$password}'");
 
     if($login) {
         if($login === false) {
