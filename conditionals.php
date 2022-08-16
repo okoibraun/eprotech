@@ -19,3 +19,12 @@ if(3>6) {
 } else {
    echo "Five is greater than 1 and 3";
 }
+
+//Operators (Arithmetical and Logical
+
+//Arithmetical
+<> <= >= == ++ -- += -= ===
+
+|| &&
+
+if()

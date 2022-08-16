@@ -77,14 +77,6 @@
                 <div class="col-xxl-12">
                     <div class="card" id="companyList">
                         <div class="card-header">
-                            <div class="row g-2">
-                                <div class="col-md-4">
-                                    <div class="search-box">
-                                        <input type="text" class="form-control search" placeholder="Search for company...">
-                                        <i class="ri-search-line search-icon"></i>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="card-body">
                             <div>
@@ -100,11 +92,13 @@
                                         </thead>
                                         <tbody class="list form-check-all">
                                             <?php
+                                                $sn=0;
                                                 $users = $crud->list_all($conn, "tbl_users");
                                                 foreach($users as $user) {
+                                                    $sn++;
                                             ?>
                                             <tr>
-                                                <td class="id" style="display:none;"></td>
+                                                <td class="id" style=""><?php echo $sn; ?></td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0">
@@ -313,10 +307,13 @@
                                                         <div>
                                                             <label for="group_name" class="form-label">User Group</label>
                                                             <select name="group_name" id="" class="form-control">
-                                                                <option value="">Select Group</option>
-                                                                <?php ?>
-                                                                <option value=""></option>
-                                                                <?php ?>
+                                                                <option value="">Select Group....</option>
+                                                                <?php
+                                                                    $user_groups = $crud->list_all($conn, "tbl_user_groups");
+                                                                    foreach($user_groups as $group) {
+                                                                ?>
+                                                                <option value="<?php echo $group['group_name']; ?>"><?php echo $group['group_name']; ?></option>
+                                                                <?php } ?>
                                                             </select>
                                                         </div>
                                                     </div>
