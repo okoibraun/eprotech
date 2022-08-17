@@ -1,4 +1,7 @@
-<?php include("app.php"); ?>
+<?php
+include("app.php");
+$crud->logged_in_not($_SESSION['login_status'], "login.php");
+?>
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none">
 
@@ -75,29 +78,24 @@
                     </div>
                 </div>
                 <!--end col-->
-                <div class="col-xxl-<?php if(isset($_GET['task']) && $_GET['task']=="comp_details") {echo "9"; } else { echo "12"; } ?>">
+                <div class="col-xxl-<?php if(isset($_GET['task']) && $_GET['task']=="comp_details") {echo "8"; } else { echo "12"; } ?>">
                     <div class="card" id="companyList">
                         <div class="card-header">
-                            <div class="row g-2">
-                                <div class="col-md-4">
-                                    <div class="search-box">
-                                        <input type="text" class="form-control search" placeholder="Search for company...">
-                                        <i class="ri-search-line search-icon"></i>
-                                    </div>
-                                </div>
-                            </div>
+                            <h4>Suppliers Lists</h4>
                         </div>
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card mb-3 dataTables_wrapper">
+                                    <style type="text/css">
+                                        .table-card div.dataTables_wrapper div.dataTables_filter input{width:400px; float:right;}
+                                        .table-card div.dataTables_wrapper div.dataTables_filter label{float:right;}
+                                    </style>
                                     <table class="table align-middle table-nowrap mb-0" id="dataTable">
                                         <thead class="table-light">
                                             <tr>
-                                                <th scope="col" style="width: 50px;">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                    </div>
-                                                </th>
+                                                <th scope="col" style="width: 50px;">#</th>
+                                                <th style="display:none;">Category</th>
+                                                <th style="display:none;">Products</th>
                                                 <th class="sort" data-sort="Company" scope="col">Company Name</th>
                                                 <!-- <th class="sort" data-sort="industry_type" scope="col">Industry Type</th> -->
                                                 <th class="sort" data-sort="location" scope="col">Location</th>
@@ -108,16 +106,11 @@
                                         </thead>
                                         <tbody class="list form-check-all">
                                             <?php
-                                                $suppliers = $crud->list_all($conn, "tbl_suppliers");
-                                                foreach($suppliers as $supplier) {
+                                                $suppliers = $crud->list_all($conn, "tbl_suppliers"); $sn=0;
+                                                foreach($suppliers as $supplier) { $sn++;
                                             ?>
                                             <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>
+                                                <td class="id" style=""><?php echo $sn; ?></td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <!-- <div class="flex-shrink-0">
@@ -129,6 +122,8 @@
                                                 <td class="industry_type"><?php echo $supplier['location']; ?></td>
                                                 <td><span class="star_value"><?php echo $supplier['email']; ?></td>
                                                 <td class="location"><?php echo $supplier['phone']; ?></td>
+                                                <td style="display:none;"><?php echo $supplier['cat_id']; ?></td>
+                                                <td style="display:none;"><?php echo $supplier['products']; ?></td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
@@ -155,17 +150,6 @@
                                             <h5 class="mt-2">Sorry! No Result Found</h5>
                                             <p class="text-muted mb-0">We've searched more than 150+ companies We did not find any companies for you search.</p>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-end mt-3">
-                                    <div class="pagination-wrap hstack gap-2">
-                                        <a class="page-item pagination-prev disabled" href="#">
-                                            Previous
-                                        </a>
-                                        <ul class="pagination listjs-pagination mb-0"></ul>
-                                        <a class="page-item pagination-next" href="#">
-                                            Next
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +298,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div>
-                                                            <label for="phone" class="form-label">Phone</label>
+                                                            <label for="phone" class="form-label">Phone <small>comma separated if more than one</small></label>
                                                             <input type="text" id="phone" name="phone" class="form-control" placeholder="Phone Number" required />
                                                         </div>
                                                     </div>
@@ -392,7 +376,7 @@
                 </div>
                 <!--end col-->
                 <?php if(isset($_GET['task']) && isset($_GET['comp_id']) && $_GET['task']=="comp_details") { ?>
-                <div class="col-xxl-3">
+                <div class="col-xxl-4">
                     <div class="card" id="company-view-detail">
                         <div class="card-body text-center">
                             <div class="position-relative d-inline-block">
@@ -403,16 +387,23 @@
                                 </div>
                             </div>
                             <h5 class="mt-3 mb-1"><?php echo $company['comp_name']; ?></h5>
-                            <p class="text-muted"><?php echo $company['cat_id']; ?></p>
+                            <p class="text-muted">
+                                <?php 
+                                    $explode_cat = explode(", ", $company['cat_id']);
+                                    foreach($explode_cat as $category) {
+                                        echo "&nbsp;&nbsp;<span style=\"background-color:#ccc;color:#000;padding:3px;\">{$category}</span>&nbsp;&nbsp;";
+                                    }
+                                ?>
+                            </p>
 
                             <ul class="list-inline mb-0">
                                 <li class="list-inline-item avatar-xs">
-                                    <a href="javascript:void(0);" class="avatar-title bg-soft-success text-success fs-15 rounded">
+                                    <a href="//<?php echo $company['website']; ?>" target="_blank" class="avatar-title bg-soft-success text-success fs-15 rounded">
                                         <i class="ri-global-line"></i>
                                     </a>
                                 </li>
                                 <li class="list-inline-item avatar-xs">
-                                    <a href="javascript:void(0);" class="avatar-title bg-soft-danger text-danger fs-15 rounded">
+                                    <a href="mailto:<?php echo $company['email']; ?>" class="avatar-title bg-soft-danger text-danger fs-15 rounded">
                                         <i class="ri-mail-line"></i>
                                     </a>
                                 </li>
@@ -430,8 +421,23 @@
                                 <table class="table table-borderless mb-0">
                                     <tbody>
                                         <tr>
-                                            <td class="fw-medium" scope="row">Industry Type</td>
-                                            <td><?php echo $company['cat_id']; ?></td>
+                                            <td class="fw-medium" scope="row">Products</td>
+                                            <td class="col-md-2">
+                                                <?php
+                                                    if($company['products'] == "") {
+                                                        echo "No products found";
+                                                    } else {
+                                                        $explode_products = explode(", ", $company['products']);
+                                                        foreach($explode_products as $product) {
+                                                            echo "<span style=\"background-color:blue;color:#fff;padding:3px;\">{$product}</span>&nbsp;&nbsp;";
+                                                        }
+                                                    }
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-medium" scope="row">Address</td>
+                                            <td><?php echo $company['address']; ?></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium" scope="row">Location</td>
@@ -440,17 +446,17 @@
                                        
                                         <tr>
                                             <td class="fw-medium" scope="row">Phone</td>
-                                            <td><?php echo $company['phone']; ?></td></td>
+                                            <td><?php echo $company['phone']; ?></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium" scope="row">Website</td>
                                             <td>
-                                                <a href="javascript:void(0);" class="link-primary text-decoration-underline"><?php echo $company['website']; ?></td></a>
+                                                <a href="//<?php echo $company['website']; ?>" class="link-primary text-decoration-underline" target="_blank"><?php echo $company['website']; ?></a>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium" scope="row">Contact Email</td>
-                                            <td><?php echo $company['email']; ?></td></td>
+                                            <td><a href="mailto:<?php echo $company['email']; ?>"><?php echo $company['email']; ?></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
