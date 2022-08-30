@@ -72,31 +72,7 @@
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
                                                 <h4 class="fs-16 mb-1">Good Morning, <?php echo $_SESSION['first_name']; ?> !</h4>
-                                                <p class="text-muted mb-0">Here's what's happening with your store today.</p>
-                                            </div>
-                                            <div class="mt-3 mt-lg-0">
-                                                <form action="javascript:void(0);">
-                                                    <div class="row g-3 mb-0 align-items-center">
-                                                        <div class="col-sm-auto">
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control border-0 dash-filter-picker shadow" data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y" data-deafult-date="01 Jan 2022 to 31 Jan 2022">
-                                                                <div class="input-group-text bg-primary border-primary text-white">
-                                                                    <i class="ri-calendar-2-line"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--end col-->
-                                                        <div class="col-auto">
-                                                            <button type="button" class="btn btn-soft-success"><i class="ri-add-circle-line align-middle me-1"></i> Add Product</button>
-                                                        </div>
-                                                        <!--end col-->
-                                                        <div class="col-auto">
-                                                            <button type="button" class="btn btn-soft-info btn-icon waves-effect waves-light layout-rightside-btn"><i class="ri-pulse-line"></i></button>
-                                                        </div>
-                                                        <!--end col-->
-                                                    </div>
-                                                    <!--end row-->
-                                                </form>
+                                                <p class="text-muted mb-0">Here's what's happening with your dashboard today.</p>
                                             </div>
                                         </div><!-- end card header -->
                                     </div>
@@ -111,22 +87,26 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Total Earnings</p>
+                                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Suppliers</p>
                                                     </div>
                                                     <div class="flex-shrink-0">
-                                                        <h5 class="text-success fs-14 mb-0">
+                                                        <!-- <h5 class="text-success fs-14 mb-0">
                                                             <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +16.24 %
-                                                        </h5>
+                                                        </h5> -->
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="559.25">0</span>k </h4>
-                                                        <a href="" class="text-decoration-underline">View net earnings</a>
+                                                        <?php 
+                                                            $get_suppliers = $crud->get($conn, "SELECT COUNT(id) AS total FROM tbl_suppliers");
+                                                            $suppliers = $get_suppliers->fetch_assoc();
+                                                        ?>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="<?php echo $suppliers['total']; ?>">0</span> </h4>
+                                                        <a href="suppliers.php" class="text-decoration-underline">View All Suppliers</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-soft-success rounded fs-3">
-                                                            <i class="bx bx-dollar-circle text-success"></i>
+                                                            <i class="bx ri-node-tree text-success"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -140,22 +120,26 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Orders</p>
+                                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Categories</p>
                                                     </div>
                                                     <div class="flex-shrink-0">
-                                                        <h5 class="text-danger fs-14 mb-0">
-                                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i> -3.57 %
-                                                        </h5>
+                                                        <!-- <h5 class="text-danger fs-14 mb-0">
+                                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i>&nbsp;
+                                                        </h5> -->
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="36894">0</span></h4>
-                                                        <a href="" class="text-decoration-underline">View all orders</a>
+                                                        <?php 
+                                                            $get_cats = $crud->get($conn, "SELECT COUNT(id) AS total FROM tbl_categories");
+                                                            $cats = $get_cats->fetch_assoc();
+                                                        ?>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="<?php echo $cats['total']; ?>">0</span></h4>
+                                                        <a href="#" class="text-decoration-underline">View all Categories</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-soft-info rounded fs-3">
-                                                            <i class="bx bx-shopping-bag text-info"></i>
+                                                            <i class="bx ri-folders-line text-info"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -169,22 +153,26 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Customers</p>
+                                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Locations</p>
                                                     </div>
                                                     <div class="flex-shrink-0">
-                                                        <h5 class="text-success fs-14 mb-0">
+                                                        <!-- <h5 class="text-success fs-14 mb-0">
                                                             <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +29.08 %
-                                                        </h5>
+                                                        </h5> -->
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="183.35">0</span>M </h4>
-                                                        <a href="" class="text-decoration-underline">See details</a>
+                                                        <?php 
+                                                            $get_locs = $crud->get($conn, "SELECT COUNT(location) AS total FROM tbl_suppliers");
+                                                            $locs = $get_locs->fetch_assoc();
+                                                        ?>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="<?php echo $locs['total']; ?>">0</span></h4>
+                                                        <a href="#" class="text-decoration-underline">See Locations</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-soft-warning rounded fs-3">
-                                                            <i class="bx bx-user-circle text-warning"></i>
+                                                            <i class="bx ri-map-pin-2-line text-warning"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -198,22 +186,22 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> My Balance</p>
+                                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Total Requests</p>
                                                     </div>
                                                     <div class="flex-shrink-0">
-                                                        <h5 class="text-muted fs-14 mb-0">
+                                                        <!-- <h5 class="text-muted fs-14 mb-0">
                                                             +0.00 %
-                                                        </h5>
+                                                        </h5> -->
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="165.89">0</span>k </h4>
-                                                        <a href="" class="text-decoration-underline">Withdraw money</a>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="">0</span></h4>
+                                                        <a href="#" class="text-decoration-underline">See All Requests</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-soft-primary rounded fs-3">
-                                                            <i class="bx bx-wallet text-primary"></i>
+                                                            <i class="bx ri-git-pull-request-fill text-primary"></i>
                                                         </span>
                                                     </div>
                                                 </div>

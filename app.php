@@ -63,6 +63,13 @@ if(isset($_POST['loginBtn'])) {
             $crud->redirect("login.php?{$_SESSION['loginErr']}");
         } else {
             $_SESSION['login_status'] = "loggedin";
+            if($_SESSION['login_status'] == "loggedin") {
+                $condition = [
+                    'key'=>'id',
+                    'val'=>$_SESSION['id']
+                ];
+                $crud->update($conn, "tbl_users", ['online'=>'1'], $condition, [], ['online'=>'i'], false);
+            }
             $crud->redirect("index.php");
         }
     }
@@ -96,8 +103,16 @@ if(isset($_POST['unlockBtn'])) {
 if(isset($_GET['action']) && isset($_GET['check'])) {
     $action = $_GET['action'];
     $check = $_GET['check'];
+    $id = $_GET['sid'];
     $logout = $crud->logout($action, $check);
     if($logout) {
+        if(isset($id)) {
+            $condition = [
+                'key'=>'id',
+                'val'=>$id
+            ];
+            $crud->update($conn, "tbl_users", ['online'=>'0'], $condition, [], ['online'=>'i'], false);
+        }
         $crud->redirect("login.php");
     }
 }
