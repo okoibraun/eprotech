@@ -82,15 +82,15 @@ $crud->logged_in_not($_SESSION['login_status'], "login.php");
                                 <div class="chat-message-list">
 
                                     <ul class="list-unstyled chat-list chat-user-list" id="userList">
-                                        <?php $get_online_users = $crud->get($conn, "SELECT * FROM tbl_users WHERE online=1"); foreach($get_online_users as $online_user) {?>
-                                        <li class="">
-                                            <a href="javascript: void(0);">
+                                        <?php $get_online_users = $crud->get($conn, "SELECT * FROM tbl_users WHERE id != {$_SESSION['id']}"); foreach($get_online_users as $online_user) {?>
+                                        <li class="<?php echo ((isset($_GET['a']) && $_GET['a'] == "convo") && $_GET['msg'] == $online_user['id']) ? "active" : ""; ?>">
+                                            <a href="?a=convo&msg=<?php echo $online_user['id']; ?>">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-shrink-0 chat-user-img online align-self-center me-2 ms-0">
                                                         <div class="avatar-xxs">
                                                             <img src="assets/images/users/<?php echo $online_user['avatar']; ?>" class="rounded-circle img-fluid userprofile" alt="">
                                                         </div>
-                                                        <span class="user-status"></span>
+                                                        <span class="<?php echo ($online_user['online'] == 1) ? "user-status": ""; ?>"></span>
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="text-truncate mb-0"><?php echo "{$online_user['first_name']} {$online_user['last_name']}"; ?></p>
@@ -106,6 +106,11 @@ $crud->logged_in_not($_SESSION['login_status'], "login.php");
                         </div>
                         <!-- end chat leftsidebar -->
                         <!-- Start User chat -->
+                        <?php
+                            if(isset($_GET['a']) && $_GET['a'] == "convo") {
+                                $get_chat_user = $crud->get($conn, "SELECT * FROM tbl_users WHERE id={$_GET['msg']}");
+                                $chat_user = $get_chat_user->fetch_assoc();
+                        ?>
                         <div class="user-chat w-100 overflow-hidden">
 
                             <div class="chat-content d-lg-flex">
@@ -123,12 +128,16 @@ $crud->logged_in_not($_SESSION['login_status'], "login.php");
                                                         <div class="flex-grow-1 overflow-hidden">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
-                                                                    <img src="assets/images/users/avatar-2.jpg" class="rounded-circle avatar-xs" alt="">
-                                                                    <span class="user-status"></span>
+                                                                    <img src="assets/images/users/<?php echo $chat_user['avatar']; ?>" class="rounded-circle avatar-xs" alt="">
+                                                                    <span class="<?php echo ($chat_user['online'] == 1) ? "user-status": ""; ?>"></span>
                                                                 </div>
                                                                 <div class="flex-grow-1 overflow-hidden">
-                                                                    <h5 class="text-truncate mb-0 fs-16"><a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">Lisa Parker</a></h5>
-                                                                    <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small>Online</small></p>
+                                                                    <h5 class="text-truncate mb-0 fs-16">
+                                                                        <a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">
+                                                                            <?php echo "{$chat_user['first_name']} {$chat_user['last_name']}"; ?>
+                                                                        </a>
+                                                                    </h5>
+                                                                    <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small><?php echo ($chat_user['online'] == 1) ? "Online": "Offline"; ?></small></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -165,7 +174,12 @@ $crud->logged_in_not($_SESSION['login_status'], "login.php");
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="conversation-name"><small class="text-muted time">09:07 am</small> <span class="text-success check-message-icon"><i class="ri-check-double-line align-bottom"></i></span></div>
+                                                                <div class="conversation-name">
+                                                                    <small class="text-muted time">09:07 am</small>
+                                                                    <span class="text-success check-message-icon">
+                                                                        <i class="ri-check-double-line align-bottom"></i>
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -306,6 +320,25 @@ $crud->logged_in_not($_SESSION['login_status'], "login.php");
                                 </div>
                             </div>
                         </div>
+                        <?php } else {?>
+                        <div class="user-chat w-100 overflow-hidden">
+
+                            <div class="chat-content d-lg-flex">
+                                <!-- start chat conversation section -->
+                                <div class="w-100 overflow-hidden position-relative">
+                                    <!-- conversation user -->
+                                    <div class="position-relative">
+
+                                        <div class="position-relative" id="users-chat">
+                                            <div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
+                                                Please select a user to start conversation with the user
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
                     </div>
                     <!-- end chat-wrapper -->
 
